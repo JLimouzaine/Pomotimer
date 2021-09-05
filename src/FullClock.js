@@ -1,5 +1,5 @@
 import Countdown, {zeroPad} from "react-countdown"
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 // 1500000 = 25mins
 
@@ -9,9 +9,19 @@ const Rest = () => {
 
 const FullClock = () => {
     const clockRef = useRef();
+    const [running, setRunning] = useState(true)
     // Referencing start and pause fncts
-    const handleStart = () => clockRef.current.start();
-    const handlePause = () => clockRef.current.pause();
+    const handleStart = () => {
+        clockRef.current.start();
+        setRunning(!running)
+        console.log(running);
+    }
+    const handlePause = () => {
+        clockRef.current.pause()
+        setRunning(!running)
+        console.log(running);
+
+    }
     //Renderer controls minutes seconds, how they look and behave
     const renderer = ({minutes, seconds, completed}) => {
         // if completed say "time to rest" or smt like that
@@ -28,8 +38,8 @@ const FullClock = () => {
             renderer ={renderer}
             autoStart={false}
             date={Date.now() + 5000}/>
-        <button onClick={handleStart}>Start</button>
-        <button onClick={handlePause}>Pause</button>
+        {running && <button onClick={handleStart}>Start</button>}
+        {!running && <button onClick={handlePause}>Pause</button>}
         </div>
     )
 }
